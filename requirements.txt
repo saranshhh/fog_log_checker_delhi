@@ -1,7 +1,3 @@
 urllib3
 requests
-ssl
-BeautifulSoup
-csv
-datetime
-os
+beautifulsoup4
