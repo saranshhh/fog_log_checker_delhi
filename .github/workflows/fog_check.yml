@@ -1,0 +1,33 @@
+name: Hourly Fog Scraper
+
+on:
+  schedule:
+    # This runs every hour at the 0th minute (UTC)
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scraper
+        run: python scraper.py
+
+      - name: Commit and Push CSV
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add delhi_fog_data.csv
+          git commit -m "Update fog data [skip ci]" || exit 0
+          git push
